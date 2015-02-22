@@ -28,11 +28,11 @@ Redis Object:
 
 var http = require('http');
 
-function httpParser (request, callback) {
+function httpRequestParser (request, callback) {
 	if (request.method == "POST") {
 		request.on ('data', function (data) {
-			var bodyData = new Array(),
-				bodyData_index = 0,
+			var httpRequestData = new Array(),
+				httpRequestData_index = 0,
 				lines = data.toString().trim().split ("\n");
 
 			// skip first and last lines (form boundry data)
@@ -40,18 +40,18 @@ function httpParser (request, callback) {
 				var	name = lines[i].split ("name=\"")[1].split("\"")[0].trim(),
 					value = lines[i+2].trim();
 
-				bodyData[bodyData_index] = new Array();
-				bodyData[bodyData_index]['name'] = name;
-				bodyData[bodyData_index]['value'] = value;
+				httpRequestData[httpRequestData_index] = new Array();
+				httpRequestData[httpRequestData_index]['name'] = name;
+				httpRequestData[httpRequestData_index]['value'] = value;
 
-				bodyData_index++;
+				httpRequestData_index++;
 			}
 
-			callback(bodyData);
+			callback(httpRequestData);
 		});
 	} else if (request.method== "GET") {
-		var bodyData = new Array(),
-			bodyData_index = 0,
+		var httpRequestData = new Array(),
+			httpRequestData_index = 0,
 
 			urlvars = request.url.split('?')[1].split('&');
 
@@ -60,21 +60,21 @@ function httpParser (request, callback) {
 				name = urlvars_split[0],
 				value = urlvars_split[1];
 
-			bodyData[bodyData_index] = new Array();
-			bodyData[bodyData_index]['name'] = name;
-			bodyData[bodyData_index]['value'] = value;
+			httpRequestData[httpRequestData_index] = new Array();
+			httpRequestData[httpRequestData_index]['name'] = name;
+			httpRequestData[httpRequestData_index]['value'] = value;
 
-			bodyData_index++;
+			httpRequestData_index++;
 
 			console.log (name + " " + value);
 		}
 
-		callback(bodyData);
+		callback(httpRequestData);
 	}
 }
 
 http.createServer(function (req, res) {
-	httpParser (req, function (bodyData) {
+	httpRequestParser (req, function (httpRequestData) {
 		var redis = require("redis"),
 			client = redis.createClient();
 
@@ -82,18 +82,18 @@ http.createServer(function (req, res) {
 			console.log("Error " + err);
 		});
 
-		if (bodyData != null) {
+		if (httpRequestData != null) {
 			var user,
 				password,
 				link;
 
-			for (var i = 0; i < bodyData.length; i++) {
-				if (bodyData[i].name == "user") {
-					user = bodyData[i].value;
-				} else if (bodyData[i].name == "password") {
-					password = bodyData[i].value;
-				} else if (bodyData[i].name == "link") {
-					link = bodyData[i].value;
+			for (var i = 0; i < httpRequestData.length; i++) {
+				if (httpRequestData[i].name == "user") {
+					user = httpRequestData[i].value;
+				} else if (httpRequestData[i].name == "password") {
+					password = httpRequestData[i].value;
+				} else if (httpRequestData[i].name == "link") {
+					link = httpRequestData[i].value;
 				}
 			}
 
@@ -138,7 +138,7 @@ http.createServer(function (req, res) {
 				});
 			}
 		} else {
-			console.log ("bodyData=NULL");
+			console.log ("httpRequestData=NULL");
 		}
 	});
 }).listen(80);
