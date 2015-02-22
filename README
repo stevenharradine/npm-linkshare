@@ -23,8 +23,6 @@ Redis Object
 		{
 			"password": "pass",
 			"links": [
-				"http://telus.com",
-				"https://telus.com",
 				"http://google.com",
 				"http://microsoft.com"
 			]
