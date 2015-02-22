@@ -1,19 +1,28 @@
 /*
+
+REST operations:
+	POST: 		// insert
+		user 	// username to post link
+		password// password of user to post link
+		link 	// link to post
+	GET: 		// select
+		user 	// username of persons whose links you want
+
 Redis Object:
 
-Key:
-harradine
+	Key:
+		harradine
 
-Value:
-{
-	"password": "pass",
-	"links": [
-		"http://telus.com",
-		"https://telus.com",
-		"http://google.com",
-		"http://microsoft.com"
-	]
-}
+	Value:
+		{
+			"password": "pass",
+			"links": [
+				"http://telus.com",
+				"https://telus.com",
+				"http://google.com",
+				"http://microsoft.com"
+			]
+		}
 
 */
 
@@ -93,12 +102,15 @@ http.createServer(function (req, res) {
 					if (reply != null) {
 						var user_object = JSON.parse(reply.toString());
 
-						res.writeHead(200, {'Content-Type': 'text/plain'});
-						res.end(JSON.stringify(user_object.links));
+						responseCode = 200;
+						responseMessage = JSON.stringify(user_object.links);
 					} else {
-						res.writeHead(404, {'Content-Type': 'text/plain'});
-						res.end('User not found');
+						responseCode = 404;
+						responseMessage = "User not found";
 					}
+
+					res.writeHead (responseCode, {'Content-Type': 'text/plain'});
+					res.end (responseMessage);
 				});
 			} else if (req.method == "POST") {
 				client.get(user, function (err, reply) {
@@ -110,16 +122,19 @@ http.createServer(function (req, res) {
 							user_object.links.push(link);
 							client.set (user, JSON.stringify(user_object));
 
-							res.writeHead(200, {'Content-Type': 'text/plain'});
-							res.end(link + " added to " + user);
+							responseCode = 200;
+							responseMessage = link + " added to " + user;
 						} else {
-							res.writeHead(403, {'Content-Type': 'text/plain'});
-							res.end("Auth failed");
+							responseCode = 403;
+							responseMessage = "Auth failed";
 						}
 					} else {
-						res.writeHead(500, {'Content-Type': 'text/plain'});
-						res.end('Server error');
+						responseCode = 500;
+						responseMessage = "Server error";
 					}
+
+					res.writeHead (responseCode, {'Content-Type': 'text/plain'});
+					res.end (responseMessage);
 				});
 			}
 		} else {
