@@ -17,6 +17,28 @@
 var http = require('http');
 var httpRequestParser = require('httpresponseparser');
 
+function json2rss (user, user_object) {
+	responseMessage  = '\
+<?xml version="1.0" encoding="UTF-8" ?>\
+<rss version="2.0">\
+<channel>\
+ <title>Shared links</title>\
+ <description>This links have been publicly shared by ' + user + '</description>';
+
+	for (var i = 0; i < user_object.links.length; i++) {
+		responseMessage += '\
+ <item>\
+  <title>Link #' + i + '</title>\
+  <link>' + user_object.links[i] + '</link>\
+ </item>';
+ 	}
+	responseMessage += '\
+</channel>\
+</rss>';
+
+	return responseMessage;
+}
+
 http.createServer(function (req, res) {
 	httpRequestParser.parse (req, function (httpRequestData) {
 		var redis = require("redis"),
@@ -29,7 +51,8 @@ http.createServer(function (req, res) {
 		if (httpRequestData != null) {
 			var user,
 				password,
-				link;
+				link,
+				returnType;
 
 			for (var i = 0; i < httpRequestData.length; i++) {
 				if (httpRequestData[i].name == "user") {
@@ -38,6 +61,8 @@ http.createServer(function (req, res) {
 					password = httpRequestData[i].value;
 				} else if (httpRequestData[i].name == "link") {
 					link = httpRequestData[i].value;
+				} else if (httpRequestData[i].name == "returnType") {
+					returnType = httpRequestData[i].value;
 				}
 			}
 
@@ -47,7 +72,12 @@ http.createServer(function (req, res) {
 						var user_object = JSON.parse(reply.toString());
 
 						responseCode = 200;
-						responseMessage = JSON.stringify(user_object.links);
+
+						if (returnType == "RSS") {
+							responseMessage = json2rss (user, user_object);
+						} else {
+							responseMessage = JSON.stringify(user_object.links);
+						}
 					} else {
 						responseCode = 404;
 						responseMessage = "User not found";
@@ -90,3 +120,4 @@ http.createServer(function (req, res) {
 		}
 	});
 }).listen(80);
+
