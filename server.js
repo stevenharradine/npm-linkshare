@@ -21,7 +21,7 @@ function httpRequestParser (request, callback) {
 
 			callback(httpRequestData);
 		});
-	} else if (request.method== "GET") {
+	} else if (request.method == "GET") {
 		var httpRequestData = new Array(),
 			httpRequestData_index = 0,
 
