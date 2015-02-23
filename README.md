@@ -15,7 +15,7 @@ Used for insert operations
 
 * user: username to post link
 * password: password of user to post link
-* ink: link to post
+* link: link to post
 
 ### GET ###
 Used for select operations
