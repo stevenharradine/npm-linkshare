@@ -19,10 +19,12 @@ Used for insert operations
 
 ### GET ### 
 Used for select operations
+
 * user: username of persons whose links you want
 
 ## Redis Object ##
 ### Key ###
+
 * username
 
 ### Value ###
