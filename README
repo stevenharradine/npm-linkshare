@@ -1,25 +1,21 @@
-REST operations
-===============
-POST
-----
+# README #
+## REST operations ##
+### POST ###
 Used for insert operations
 
-		user 	// username to post link
-		password// password of user to post link
-		link 	// link to post
-GET
----
+* user: username to post link
+* password: password of user to post link
+* ink: link to post
+
+### GET### 
 Used for select operations
+* user: username of persons whose links you want
 
-		user 	// username of persons whose links you want
+## Redis Object ##
+### Key ###
+* username
 
-Redis Object
-============
-
-	Key:
-		harradine
-
-	Value:
+### Value ###
 		{
 			"password": "pass",
 			"links": [
