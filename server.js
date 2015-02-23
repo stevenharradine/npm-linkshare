@@ -37,8 +37,6 @@ function httpRequestParser (request, callback) {
 			httpRequestData[httpRequestData_index]['value'] = value;
 
 			httpRequestData_index++;
-
-			console.log (name + " " + value);
 		}
 
 		callback(httpRequestData);
