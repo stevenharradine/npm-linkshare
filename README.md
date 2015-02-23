@@ -7,7 +7,7 @@ Used for insert operations
 * password: password of user to post link
 * ink: link to post
 
-### GET### 
+### GET ### 
 Used for select operations
 * user: username of persons whose links you want
 
