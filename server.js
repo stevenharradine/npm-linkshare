@@ -15,7 +15,7 @@
  */
 
 var http = require('http');
-var httpRequestParser = require('httpRequestParser');
+var httpRequestParser = require('httpresponseparser');
 
 http.createServer(function (req, res) {
 	httpRequestParser.parse (req, function (httpRequestData) {
@@ -55,6 +55,8 @@ http.createServer(function (req, res) {
 
 					res.writeHead (responseCode, {'Content-Type': 'text/plain'});
 					res.end (responseMessage);
+
+					client.quit();
 				});
 			} else if (req.method == "POST") {
 				client.get(user, function (err, reply) {
@@ -79,6 +81,8 @@ http.createServer(function (req, res) {
 
 					res.writeHead (responseCode, {'Content-Type': 'text/plain'});
 					res.end (responseMessage);
+
+					client.quit();
 				});
 			}
 		} else {
