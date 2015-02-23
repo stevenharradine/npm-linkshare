@@ -1,0 +1,10 @@
+{
+  "name": "linkshare",
+  "description": "Application for sharing links",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "http": "*",
+    "redis": "*"
+  }
+}
