@@ -6,6 +6,6 @@
   "dependencies": {
     "http": "*",
     "redis": "*",
-    "httpresponseparser": "https://bitbucket.org/stevenharradine/httpresponseparser/get/master.tar.gz"
+    "httpresponseparser": "https://github.com/stevenharradine/npm-httpresponseparser/archive/master.zip"
   }
 }
